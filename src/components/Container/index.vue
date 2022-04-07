@@ -24,13 +24,17 @@
 
 <script>
 import LowCode from "@/components/LowCode";
-import { searchWebConfigById } from '@/api/http.js';
+import { searchWebConfigById } from "@/api/http.js";
+import { mapGetters } from "vuex";
 export default {
   props: {
     id: String,
   },
   components: {
     LowCode,
+  },
+  computed: {
+    ...mapGetters(["projectId", "router"]),
   },
   data() {
     return {
@@ -42,8 +46,7 @@ export default {
       tableOption: {
         border: true,
       },
-      tableJson: [
-      ],
+      tableJson: [],
       sizeChange: "",
       pageOption: {},
       dialogSchema: [],
@@ -54,36 +57,47 @@ export default {
       dialogTableJson: {},
     };
   },
-  async created() {
-    const data = await searchWebConfigById(this.id);
+  watch: {
+    $route: {
+      async handler(val) {
+        debugger;
+        if (val.meta.id) {
 
-    this.efsSchema = JSON.parse(data.efsSchema);
-    this.efsValue = JSON.parse(data.formValue);
-    this.efsConfig = JSON.parse(data.efsConfig);
+          const data = await searchWebConfigById(val.meta.id);
 
-    this.buttonData = JSON.parse(data.buttonData);
+          this.efsSchema = JSON.parse(data.efsSchema);
+          this.efsValue = JSON.parse(data.formValue);
+          this.efsConfig = JSON.parse(data.efsConfig);
 
-    this.columns = JSON.parse(data.tableSchema);
-    this.pageOption = JSON.parse(data.pageOption);
-    this.sizeChange = JSON.parse(data.pageOption).sizeChange;
+          this.buttonData = JSON.parse(data.buttonData);
 
-    this.dialogSchema = JSON.parse(data.dialogData);
-    this.dialogValue = JSON.parse(data.dialogValue);
-    this.dialogEfsSchema = JSON.parse(data.dialogEfsSchema);
-    this.dialogEfsValue = JSON.parse(data.dialogEfsValue);
-    this.dialogTableColums = JSON.parse(data.dialogTableColums);
+          this.columns = JSON.parse(data.tableSchema);
+          this.pageOption = JSON.parse(data.pageOption);
+          this.sizeChange = JSON.parse(data.pageOption).sizeChange;
+
+          this.dialogSchema = JSON.parse(data.dialogData);
+          this.dialogValue = JSON.parse(data.dialogValue);
+          this.dialogEfsSchema = JSON.parse(data.dialogEfsSchema);
+          this.dialogEfsValue = JSON.parse(data.dialogEfsValue);
+          this.dialogTableColums = JSON.parse(data.dialogTableColums);
+        }
+      },
+      immediate: true,
+      deep: true,
+    },
   },
+  async created() {},
   methods: {
     handleEFSChange(val) {
       this.model = val;
     },
-    openDialog({field, value}) {
+    openDialog({ field, value }) {
       console.log(field, value);
       this.dialogValue[field] = true;
     },
     closeDialog(field) {
       this.dialogValue[field] = false;
-    }
+    },
   },
 };
 </script>

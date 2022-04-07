@@ -1,9 +1,11 @@
 import Vue from "vue";
 import VueRouter from "vue-router";
-import Layout from "@/layout";
+import Layout from "@/layout/index.vue";
+import Layout1 from "@/layout/index1.vue";
 import Login from "@/views/Login";
 import ProjectManage from "@/views/ProjectManage";
 import Dashboard from "@/views/Dashboard";
+import store from "@/store/index.js";
 
 const originalPush = VueRouter.prototype.push;
 
@@ -27,7 +29,7 @@ const routes = [
   {
     path: "/admin/:id",
     component: Layout,
-    redirect: "/admin/:id/dashboard",
+    redirect: "/admin/:id/useradmin",
     children: [
       {
         path: "/admin/:id/dashboard",
@@ -35,7 +37,7 @@ const routes = [
         meta: {
           title: "系统首页",
         },
-        component: () => import("@/components/Auth/UserAdmin.vue"),
+        component: () => import("@/components/Dashboard/index.vue"),
       },
       {
         path: "/admin/:id/useradmin",
@@ -63,76 +65,43 @@ const routes = [
       },
     ],
   },
+  {
+    path: "/manage",
+    name: "manage",
+    component: Layout1,
+    redirect: "/manage/dashboard",
+    children: [
+      {
+        path: "/manage/dashboard",
+        name: "系统首页",
+        meta: {
+          title: "系统首页",
+        },
+        component: () => import("@/components/Dashboard/index.vue"),
+      },
+    ],
+  },
 ];
-
-// const routes = [
-//   {
-//     path: "/",
-//     component: Layout,
-//     redirect: "/login",
-//   },
-//   {
-//     path: "/login",
-//     component: Login,
-//   },
-//   { path: "/projectManage", component: ProjectManage },
-//   {
-//     path: "/home",
-//     redirect: "/projectManage",
-//     component: Layout,
-//     meta: { title: "首页" },
-//     children: [
-//       {
-//         path: "/dashboard",
-//         component: () => import("../views/Dashboard"),
-//         meta: { title: "仪表盘" },
-//       },
-//       {
-//         path: "/bookManage",
-//         component: () => import("../views/BookManage"),
-//         meta: { title: "图书管理" },
-//       },
-//     ],
-//   },
-//   {
-//     path: "/admin",
-//     redirect: "/13",
-//     component: Layout,
-//     meta: { title: "首页" },
-//     children: [
-//       {
-//         path: "/13",
-//         component: () => import("../views/Dashboard"),
-//         meta: { title: "仪表盘" },
-//       },
-//       {
-//         path: "/useradmin",
-//         component: () => import("../components/Auth/UserAdmin.vue"),
-//         meta: { title: "仪表盘" },
-//       },
-//       {
-//         path: "/routeradmin",
-//         component: () => import("../components/Auth/RouterAdmin.vue"),
-//         meta: { title: "仪表盘" },
-//       },
-//       {
-//         path: "/roleadmin",
-//         component: () => import("../components/Auth/RoleAdmin.vue"),
-//         meta: { title: "仪表盘" },
-//       },
-//     ],
-//   },
-// ];
 
 const router = new VueRouter({
   routes,
 });
 
 router.beforeEach((to, from, next) => {
-  if (to.path === "/login") {
-    next();
+  const token = window.localStorage.getItem("token");
+  if (token) {
+    if (store.state.nowRouter && store.state.nowRouter.length === 0) {
+      // 重新获取数据
+      store.commit(
+        "setNowRouter",
+        JSON.parse(window.sessionStorage.getItem("nowRouter"))
+      );
+      next(to.path);
+    } else {
+      next();
+    }
   } else {
-    if (window.localStorage.getItem("token")) {
+    if (to.path === "/login") {
       next();
     } else {
       next("/login");

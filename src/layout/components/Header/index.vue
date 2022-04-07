@@ -65,9 +65,11 @@ export default {
     return {
       fullscreen: false,
       name: "afeilovehanger",
-      message: 1
+      message: 1,
+      router: [],
     };
   },
+
   computed: {
     username() {
       let username = localStorage.getItem("username");

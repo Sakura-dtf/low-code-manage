@@ -3,14 +3,16 @@
     <div class="project-box-container" v-if="projects.length">
       <div v-for="item in projects">
         <router-link
-          v-if="item.type === '2'"
+          v-if="item.type === '1'"
           :to="{ path: `/admin/${item.id}` }"
           @click="handleClick(item.id)"
           class="project-box"
         >
           {{ item.name }}
         </router-link>
-        <router-link v-else :to="{ path: '/project', params: { id: 1 }}" class="project-box"> {{ item.name }}</router-link>
+        <div v-else @click="hanleManageClick(item.id)" class="project-box">
+          {{ item.name }}
+        </div>
       </div>
     </div>
     <div v-else>您的角色暂时没有项目</div>
@@ -21,7 +23,7 @@
 </template>
 
 <script>
-import { getAllProjectByRole } from "@/api/http.js";
+import { getAllProjectByRole, getAllRouterByAuthByProject } from "@/api/http.js";
 export default {
   data() {
     return {
@@ -33,9 +35,20 @@ export default {
     console.log(res.data);
     this.projects = res.data;
   },
-  handleClick(id) {
-    this.$store.commit("setNowProjectId", id)
-  }
+  methods: {
+    handleClick(id) {
+      this.$store.commit("setNowProjectId", id);
+    },
+    async hanleManageClick(id) {
+      this.$store.commit("setNowProjectId", id);
+      const res = await getAllRouterByAuthByProject(id);
+      if(res.errno === 0) {
+        const data = res.data.data;
+        this.$store.commit("setNowRouter", data);
+      }
+      this.$router.push("/manage");
+    },
+  },
 };
 </script>
 
@@ -51,7 +64,6 @@ export default {
 .project-box {
   width: 280px;
   height: 200px;
-  line-height: 150px;
   font-size: 30px;
   font-weight: bold;
   cursor: pointer;

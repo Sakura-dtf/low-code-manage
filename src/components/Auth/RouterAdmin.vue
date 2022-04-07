@@ -34,7 +34,7 @@
 </template>
 
 <script>
-import { getAllRouterByProject } from "@/api/http.js";
+import { getAllRouterByAuthByAdminProject } from "@/api/http.js";
 export default {
   data() {
     return {
@@ -42,7 +42,7 @@ export default {
     };
   },
   async created() {
-    const res = await getAllRouterByProject(this.$route.params.id);
+    const res = await getAllRouterByAuthByAdminProject(this.$route.params.id);
     if (res.errno === 0) {
       this.tableData = res.data.data;
     }

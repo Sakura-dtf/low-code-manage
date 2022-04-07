@@ -23,43 +23,51 @@
       :collapse-transition="false"
     >
       <template v-for="item in items">
-        <template v-if="item.subs">
-          <el-submenu :index="item.index" :key="item.index">
+        <template v-if="item.children">
+          <el-submenu :index="'/manage' + item.path" :key="item.id">
             <template slot="title">
               <i :class="item.icon"></i>
-              <span slot="title" style="font-size: 13px">{{ item.title }}</span>
+              <span slot="title" style="font-size: 13px">{{ item.name }}</span>
             </template>
-            <template v-for="subItem in item.subs">
+            <template v-for="subItem in item.children">
               <el-submenu
-                v-if="subItem.subs"
-                :index="subItem.index"
-                :key="subItem.index"
+                v-if="subItem.children"
+                :index="'/manage' + subItem.path"
+                :key="subItem.id"
               >
                 <template slot="title" style="font-size: 13px">{{
-                  subItem.title
+                  subItem.name
                 }}</template>
                 <el-menu-item
-                  v-for="(threeItem, i) in subItem.subs"
+                  v-for="(threeItem, i) in subItem.children"
                   :key="i"
-                  :index="threeItem.index"
+                  :index="'/manage' + threeItem.path"
                   style="font-size: 13px"
-                  >{{ threeItem.title }}</el-menu-item
                 >
+                  <i :class="threeItem.icon"></i>
+                  <span slot="title" style="font-size: 13px">{{
+                    threeItem.name
+                  }}</span>
+                </el-menu-item>
               </el-submenu>
               <el-menu-item
                 v-else
-                :index="subItem.index"
-                :key="subItem.index"
+                :index="'/manage' + subItem.path"
+                :key="subItem.id"
                 style="font-size: 13px"
-                >{{ subItem.title }}</el-menu-item
               >
+                <i :class="subItem.icon"></i>
+                <span slot="title" style="font-size: 13px">{{
+                  subItem.name
+                }}</span>
+              </el-menu-item>
             </template>
           </el-submenu>
         </template>
         <template v-else>
-          <el-menu-item :index="item.index" :key="item.index">
+          <el-menu-item :index="'/manage' + item.path" :key="item.id">
             <i :class="item.icon"></i>
-            <span slot="title" style="font-size: 13px">{{ item.title }}</span>
+            <span slot="title" style="font-size: 13px">{{ item.name }}</span>
           </el-menu-item>
         </template>
       </template>
@@ -68,44 +76,29 @@
 </template>
 
 <script>
-import { mapGetters } from "vuex"
+import { mapGetters } from "vuex";
 export default {
   name: "SideBar",
   data: function () {
-    return {
-      items: [
-        {
-          icon: "el-icon-s-home",
-          index: "dashboard",
-          title: "系统首页",
-        },
-        {
-          icon: "el-icon-user-solid",
-          index: "useradmin",
-          title: "用户管理",
-        },
-        {
-          icon: "el-icon-user-solid",
-          index: "routeradmin",
-          title: "菜单管理",
-        },
-        {
-          icon: "el-icon-user-solid",
-          index: "roleadmin",
-          title: "角色管理",
-        }
-      ],
-    };
+    return {};
   },
+  methods: {},
   computed: {
-    ...mapGetters(["router"])
-    ,onRoutes() {
+    ...mapGetters(["router"]),
+    items() {
+      const res = JSON.parse(JSON.stringify(this.router));
+      let dashboard = {
+        name: "系统首页",
+        path: "/dashboard",
+        icon: "el-icon-menu"
+      }
+      res.unshift(dashboard)
+      return res;
+    },
+    onRoutes() {
       return this.$route.path.replace("/", "");
     },
   },
-  created() {},
-  methods: {},
-
   props: {
     collapse: {
       type: Boolean,

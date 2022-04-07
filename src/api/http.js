@@ -24,11 +24,22 @@ export const getAllUserByProjectId = async function (projectId) {
   return res;
 };
 
-export const getAllRouterByProject = async function (projectId) {
+export const getAllRouterByAuthByProject = async function (projectId) {
   const { data: res } = await http.post("/router/getAllRouterByAuthByProject", {
     projectId,
     auth: 2,
   });
+  return res;
+};
+
+export const getAllRouterByAuthByAdminProject = async function (projectId) {
+  const { data: res } = await http.post(
+    "/router/getAllRouterByAuthByAdminProject",
+    {
+      projectId,
+      auth: 2,
+    }
+  );
   return res;
 };
 

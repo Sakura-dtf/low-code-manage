@@ -92,6 +92,10 @@ export default {
         } else if(data.errno === 0) {
           this.$message.success("登录成功");
           window.localStorage.setItem("token", data.data.data.token);
+          window.localStorage.setItem("username", data.data.data.username);
+          // window.localStorage.setItem("token", data.data.data.token);
+          // window.localStorage.setItem("token", data.data.data.token);
+
           this.$router.push("/projectManage");
         }
       });

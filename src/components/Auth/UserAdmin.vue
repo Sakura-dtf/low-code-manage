@@ -61,9 +61,9 @@ export default {
   },
   async created() {
     const res = await getAllUserByProjectId(this.$route.params.id);
-    //  if(res.errno === 0) {
-    //     this.tableData = res.data.data;
-    //  }
+     if(res.errno === 0) {
+        this.tableData = res.data.data;
+     }
   },
   methods: {
     submit() {
