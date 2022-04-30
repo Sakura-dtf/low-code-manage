@@ -17,17 +17,14 @@ export const getAllProjectByRole = async function () {
   return res;
 };
 
-export const getAllUserByProjectId = async function (projectId) {
-  const { data: res } = await http.post("/user/getProjectAllUser", {
-    projectId,
-  });
+export const getAllUserByProjectId = async function (params) {
+  const { data: res } = await http.post("/user/getProjectAllUser", params);
   return res;
 };
 
 export const getAllRouterByAuthByProject = async function (projectId) {
   const { data: res } = await http.post("/router/getAllRouterByAuthByProject", {
     projectId,
-    auth: 2,
   });
   return res;
 };
@@ -37,7 +34,6 @@ export const getAllRouterByAuthByAdminProject = async function (projectId) {
     "/router/getAllRouterByAuthByAdminProject",
     {
       projectId,
-      auth: 2,
     }
   );
   return res;
@@ -46,7 +42,67 @@ export const getAllRouterByAuthByAdminProject = async function (projectId) {
 export const GetAllAuthByProjectId = async function (projectId) {
   const { data: res } = await http.post("/auth/GetAllAuthByProjectId", {
     projectId,
-    auth: 2,
   });
+  return res;
+};
+
+export const registerUser = async function (params) {
+  const { data: res } = await http.post("/user/register", params);
+  return res;
+};
+
+export const setUserAuth = async function (params) {
+  const { data: res } = await http.post("/user/setUserAuth", params);
+  return res;
+};
+
+export const getAllWebCOnfig = async function () {
+  const { data: res } = await http.post("/getConfigByUser");
+  return res;
+};
+
+export const addRouter = async function (params) {
+  const { data: res } = await http.post("/router/addRouter", params);
+  return res;
+};
+
+export const addButton = async function (params) {
+  const { data: res } = await http.post("/button/addButton", params);
+  return res;
+};
+
+export const getOneRouterById = async function (params) {
+  const { data: res } = await http.post("/router/getOneRouterById", params);
+  return res;
+};
+
+export const getButton = async function (params) {
+  const { data: res } = await http.post("/button/getButton", params);
+  return res;
+};
+
+export const setRouter = async function (params) {
+  const { data: res } = await http.post("/router/setRouterById", params);
+  return res;
+};
+
+export const addRole = async function (params) {
+  const { data: res } = await http.post("/auth/addRole", params);
+  return res;
+};
+
+export const getProjectAndShowProject = async function (params) {
+  const { data: res } = await http.post(
+    "/project/getProjectAndShowProject",
+    params
+  );
+  return res;
+};
+
+export const getAllRouterByAdminProject = async function (params) {
+  const { data: res } = await http.post(
+    "/router/getAllRouterByAdminProject",
+    params
+  );
   return res;
 };

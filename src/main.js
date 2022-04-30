@@ -10,6 +10,16 @@ import "./assets/css/icon.css";
 import elFormSchema from "@kummy/el-form-schema";
 Vue.use(elFormSchema);
 
+import moment from "moment";
+Vue.filter("datefmt", function (input, fmtstring) {
+  //当input为时间戳，需转为Number类型
+  if (input) {
+    return moment(input).format(fmtstring);
+  } else {
+    return "";
+  }
+});
+
 Vue.config.productionTip = false;
 
 export default new Vue({

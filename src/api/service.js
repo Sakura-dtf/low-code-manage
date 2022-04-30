@@ -23,7 +23,6 @@ service.interceptors.request.use((config) => {
 service.interceptors.response.use(
   (response) => {
     // 请求成功进行的操作。// 可以使用switch/if...else对数据先进行处理。
-    console.log(App);
     if (response.data.errno !== 0) {
       Vue.prototype.$message.error(response.data.message);
     }
@@ -32,6 +31,10 @@ service.interceptors.response.use(
   },
   (error) => {
     // 请求失败进行的操作
+    console.log(error.response);
+    if (error.response.status === 401) {
+      App.$router.push("/login");
+    }
     return error;
   }
 );

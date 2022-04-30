@@ -38,7 +38,6 @@ export default {
 
   methods: {
     handleClick(field) {
-       debugger;
       this.$emit("handleBtnClick", field)
     },
     handleDisabled(field) {

@@ -60,7 +60,6 @@ export default {
   watch: {
     $route: {
       async handler(val) {
-        debugger;
         if (val.meta.id) {
 
           const data = await searchWebConfigById(val.meta.id);

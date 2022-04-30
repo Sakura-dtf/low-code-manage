@@ -42,11 +42,13 @@ export default {
     async hanleManageClick(id) {
       this.$store.commit("setNowProjectId", id);
       const res = await getAllRouterByAuthByProject(id);
+      console.log(res, "aaa")
       if(res.errno === 0) {
         const data = res.data.data;
         this.$store.commit("setNowRouter", data);
+        this.$router.push("/manage");
       }
-      this.$router.push("/manage");
+      
     },
   },
 };

@@ -5,7 +5,6 @@ import root from "@/main.js";
 Vue.use(Vuex);
 
 function addOneRouter(item) {
-  // debugger;
   // router.addRouter({
   //   path: "/aaa",
   //   component: () => import("@/views/Login.vue"),
@@ -67,7 +66,6 @@ export default new Vuex.Store({
     },
     setNowRouter(state, routers) {
       state.nowRouter = routers;
-      console.log(router);
       window.sessionStorage.setItem("nowRouter", JSON.stringify(routers));
       if (routers && routers.length) {
         routers.forEach((item) => {

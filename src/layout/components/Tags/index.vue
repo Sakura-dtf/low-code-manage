@@ -31,21 +31,24 @@ export default {
     };
   },
   watch: {
-    $route(newValue) {
-      this.setTags(newValue);
+    $route: {
+      handler: function(newValue) {
+        this.setTags(newValue);
+        console.log(newValue, "value");
+      },
+      deep: true,
     },
     tagValue(val) {
       this.goToPath(val);
-    }
+    },
   },
   mounted() {
     this.setTags(this.$route);
   },
   methods: {
-
     async goToPath(val) {
-      for(let i = 0; i <= this.tagsList.length; i++) {
-        if(this.tagsList[i].name === val) {
+      for (let i = 0; i <= this.tagsList.length; i++) {
+        if (this.tagsList[i].name === val) {
           await this.$router.push(this.tagsList[i].path);
           break;
         }
@@ -55,12 +58,17 @@ export default {
       const isExist = this.tagsList.some((item) => {
         return item.path === route.fullPath;
       });
-      console.log(this.tagsList, 2);
+
       if (!isExist) {
         if (this.tagsList.length >= 8) {
           this.tagsList.shift();
         }
         if (route.matched[1]) {
+          console.log({
+            title: route.meta.title,
+            path: route.fullPath,
+            name: route.name,
+          });
           this.tagsList.push({
             title: route.meta.title,
             path: route.fullPath,
@@ -68,19 +76,21 @@ export default {
           });
         }
         this.tagValue = this.tagsList[this.tagsList.length - 1].name;
+      } else {
+        this.tagValue = route.name;
       }
+      
     },
 
     removeTab(val) {
-      for(let i = 0; i <= this.tagsList.length; i++) {
-        if(this.tagsList[i].name === val) {
+      for (let i = 0; i <= this.tagsList.length; i++) {
+        if (this.tagsList[i].name === val) {
           let delItem = this.tagsList.splice(i, 1);
-          if(this.tagsList.length) {
+          if (this.tagsList.length) {
             // this.$router.push(this.tagsList[this.tagsList.length - 1].path);
-            this.tagValue = this.tagsList[this.tagsList.length - 1].name
+            this.tagValue = this.tagsList[this.tagsList.length - 1].name;
           } else {
             let path = this.$route.path.split("/");
-            console.log(path)
             path[3] = "dashboard";
             this.$router.push(path.join("/"));
           }

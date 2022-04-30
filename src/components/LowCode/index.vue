@@ -139,8 +139,6 @@ export default {
   },
   methods: {
     handleBtnClick(field) {
-      debugger;
-      console.log("yyyyy")
       let btn;
       this.buttonData.forEach((item) => {
         if (item.field === field) {
