@@ -991,10 +991,10 @@
     "@jridgewell/resolve-uri" "^3.0.3"
     "@jridgewell/sourcemap-codec" "^1.4.10"
 
-"@kummy/el-form-schema@^1.2.6":
-  version "1.2.6"
-  resolved "https://registry.yarnpkg.com/@kummy/el-form-schema/-/el-form-schema-1.2.6.tgz#65c90a97e9976528376b58b83932fbd0e151a2d5"
-  integrity sha512-qRO844IoCLBUk1mMNNeCFBdduwys6k6Y7cUTQdJxcVI9kWM3BvNtcM42rzwD954j/nBmJ4ixS0ph5TYCb7+3Tg==
+"@kummy/el-form-schema@^1.2.10":
+  version "1.2.10"
+  resolved "https://registry.yarnpkg.com/@kummy/el-form-schema/-/el-form-schema-1.2.10.tgz#7c5289c08f2f4a12f739a1c568a080b44d9f6f51"
+  integrity sha512-4pVAWFXuzcUfVNbjGBPxl34YEpsy71D6MH1zuCkExr4bpdYqwjuILlucpxd9e2f2EDO5M8rFmHui0UUiej0yaw==
 
 "@mrmlnc/readdir-enhanced@^2.2.1":
   version "2.2.1"

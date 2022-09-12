@@ -55,6 +55,9 @@ export default {
     const data = await searchWebConfigById("1");
     console.log(data);
     this.efsSchema = JSON.parse(data.efsSchema);
+
+    console.log(this.efsSchema, "schema 1")
+
     this.efsValue = JSON.parse(data.formValue);
     this.efsConfig = JSON.parse(data.efsConfig);
 
@@ -69,6 +72,8 @@ export default {
     this.dialogEfsSchema = JSON.parse(data.dialogEfsSchema);
     this.dialogEfsValue = JSON.parse(data.dialogEfsValue);
     this.dialogTableColums = JSON.parse(data.dialogTableColums);
+
+    this.hanldeUrl();
   },
   methods: {
     handleEFSChange(val) {
@@ -80,7 +85,10 @@ export default {
     },
     closeDialog(field) {
       this.dialogValue[field] = false;
-    }
+    },
+    hanldeUrl() {
+      console.log(this.efsSchema, "schema")
+    },
   },
 };
 </script>

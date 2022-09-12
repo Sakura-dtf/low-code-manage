@@ -7,7 +7,7 @@
     "build": "vue-cli-service build"
   },
   "dependencies": {
-    "@kummy/el-form-schema": "^1.2.6",
+    "@kummy/el-form-schema": "^1.2.10",
     "axios": "^0.26.0",
     "core-js": "^3.6.5",
     "element-ui": "^2.4.5",

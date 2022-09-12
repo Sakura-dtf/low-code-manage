@@ -51,12 +51,17 @@
 
         <el-table-column
           v-else-if="!item.component"
-          :key="item.prop"
+          :key="index"
           v-bind="{ ...item }"
         >
         </el-table-column>
       </template>
-      <el-table-column label="操作" v-if="btns.length !== 0">
+
+      <el-table-column
+        label="操作"
+        v-if="btns.length !== 0"
+        v-bind="{ ...btns[0] }"
+      >
         <template slot-scope="scope">
           <template v-for="(btn, index) in btns">
             <el-button
@@ -74,11 +79,11 @@
       <el-pagination
         @size-change="handleSizeChange"
         @current-change="handleCurrentChange"
-        :current-page="pageOption.curPage"
-        :page-sizes="pageOption.sizes"
-        :page-size="pageOption.size"
+        :current-page="pageOption.pageCurpage"
+        :page-sizes="pageOption.pageSizes"
+        :page-size="pageOption.pageSize"
         layout="total, sizes, prev, pager, next, jumper"
-        :total="pageOption.total"
+        :total="pageOption.pageTotal"
       >
       </el-pagination>
     </div>
@@ -92,6 +97,14 @@ export default {
     tableData: {
       type: Array,
       default: () => [],
+    },
+    formValue: {
+      type: Object,
+      default: () => {},
+    },
+    efsConfig: {
+      type: Object,
+      default: () => {},
     },
     columns: {
       type: Array,
@@ -128,11 +141,12 @@ export default {
     columns: {
       handler(val) {
         this.btns = [];
-        val.forEach((item) => {
-          if (item.component && item.component.tag === "button") {
-            this.btns.push(item);
-          }
-        });
+        val &&
+          val.forEach((item) => {
+            if (item.component && item.component.tag === "button") {
+              this.btns.push(item);
+            }
+          });
       },
       immediate: true,
       deep: true,
@@ -157,8 +171,9 @@ export default {
     },
     handerClick(scope, fn) {
       let fnc = new Function("return " + fn.toString().trim())();
-      let cb = () => {
-
+      let cb = (field, row, type) => {
+        console.log(field, row, type);
+        this.$emit("openDialog",   field, row, type )
       };
       fnc.call(this, scope.row, cb);
     },
@@ -166,8 +181,60 @@ export default {
       let fnc = new Function("return " + fn.toString().trim())();
       fnc.call(this, val);
     },
-    handleCurrentChange(val) {},
-    handleSizeChange(val) {},
+    handleCurrentChange(val) {
+      console.log(val);
+      let formCtx = {
+        formValue: this.formValue,
+        pageInfo: this.pageOption,
+        cb: async (url, type) => {
+          let res = await this.$http.post(url, {
+            ...formCtx.formValue,
+            pageIndex: val,
+            pageSize: formCtx.pageInfo.pageSize,
+          });
+          if (res.data) {
+            this.$emit("handleTable", res.data.data, res.data.total);
+          }
+        },
+      };
+      let tableCtx = {
+        cb: (val, total) => {},
+        pageInfo: this.pageOption,
+      };
+
+      let fn = new Function(
+        "return " + this.efsConfig.onSubmit.toString().trim()
+      )();
+
+      fn.call(this, formCtx, tableCtx);
+    },
+    handleSizeChange(val) {
+      console.log(val, this.pageOption);
+      let formCtx = {
+        formValue: this.formValue,
+        pageInfo: this.pageOption,
+        cb: async (url, type) => {
+          let res = await this.$http.post(url, {
+            ...formCtx.formValue,
+            pageIndex: formCtx.pageInfo.pageCurpage,
+            pageSize: val,
+          });
+          if (res.data) {
+            this.$emit("handleTable", res.data.data, res.data.total);
+          }
+        },
+      };
+      let tableCtx = {
+        cb: (val, total) => {},
+        pageInfo: this.pageOption,
+      };
+
+      let fn = new Function(
+        "return " + this.efsConfig.onSubmit.toString().trim()
+      )();
+
+      fn.call(this, formCtx, tableCtx);
+    },
   },
 };
 </script>

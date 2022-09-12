@@ -16,6 +16,7 @@ VueRouter.prototype.push = function push(location) {
 Vue.use(VueRouter);
 
 const routes = [
+  { path: "/test", component: () => import("@/views/test") },
   {
     path: "/",
     component: Layout,

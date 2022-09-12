@@ -9,7 +9,7 @@ function addOneRouter(item) {
   //   path: "/aaa",
   //   component: () => import("@/views/Login.vue"),
   // });
-
+  console.log(item);
   router.addRoute("manage", {
     path: "/manage" + item.path,
     name: item.name,
@@ -17,6 +17,7 @@ function addOneRouter(item) {
     meta: {
       title: item.name,
       id: item.webConfigId,
+      routerId: item.id,
     },
   });
 
@@ -28,6 +29,8 @@ export default new Vuex.Store({
     asyncRouterMap: [],
     nowProjectid: "",
     nowRouter: [],
+    buttons: [],
+    AuthId: "",
   },
   getters: {
     projectId(state) {
@@ -37,6 +40,20 @@ export default new Vuex.Store({
         if (window.sessionStorage.getItem("nowProjectid")) {
           state.nowProjectid = window.sessionStorage.getItem("nowProjectid");
           return state.nowProjectid;
+        } else {
+          // 跳转操作
+        }
+      }
+    },
+    authId(state) {
+      if (state.AuthId) {
+        return state.AuthId;
+      } else {
+        console.log(window.localStorage.getItem("AuthId"));
+        if (window.localStorage.getItem("AuthId")) {
+          state.AuthId = window.localStorage.getItem("AuthId");
+          console.log(window.localStorage.getItem("AuthId"));
+          return state.AuthId;
         } else {
           // 跳转操作
         }
@@ -58,11 +75,20 @@ export default new Vuex.Store({
         }
       }
     },
+    btn(state) {
+      return state.buttons;
+    },
   },
   mutations: {
     setNowProjectId(state, id) {
       this.nowProjectid = id;
       window.sessionStorage.setItem("nowProjectid", id);
+    },
+    setButton(state, btns) {
+      state.buttons = btns;
+    },
+    setAuthId(state, id) {
+      state.AuthId = id;
     },
     setNowRouter(state, routers) {
       state.nowRouter = routers;

@@ -106,3 +106,18 @@ export const getAllRouterByAdminProject = async function (params) {
   );
   return res;
 };
+
+export const setRouterAuth = async function (params) {
+  const { data: res } = await http.post("/router/setRouterAuth", params);
+  return res;
+};
+
+export const setButtonAuth = async function (params) {
+  const { data: res } = await http.post("/button/setButtonAuth", params);
+  return res;
+};
+
+
+
+
+
